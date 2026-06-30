@@ -33,9 +33,9 @@ export default function HowItWorks() {
           
           {/* Vertical connection line */}
           {/* Desktop line */}
-          <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/10 via-primary/45 to-primary/10 -translate-x-1/2 hidden sm:block pointer-events-none" />
+          <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/10 via-primary/45 to-primary/10 -translate-x-1/2 hidden lg:block pointer-events-none" />
           {/* Mobile line */}
-          <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-primary/20 sm:hidden pointer-events-none" />
+          <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-primary/20 lg:hidden pointer-events-none" />
 
           {/* Timeline Steps */}
           <div className="space-y-12 sm:space-y-16">
@@ -46,7 +46,7 @@ export default function HowItWorks() {
               return (
                 <div key={step.step}>
                   {/* Desktop Layout (sm and up) */}
-                  <div className="hidden sm:flex items-center justify-between relative w-full">
+                  <div className="hidden lg:flex items-center justify-between relative w-full">
                     {/* Left Column (Content if Even, Empty if Odd) */}
                     <div className="w-[calc(50%-32px)] flex justify-end">
                       {isEven && (
@@ -102,7 +102,7 @@ export default function HowItWorks() {
                   </div>
 
                   {/* Mobile Layout (Strict single-column) */}
-                  <div className="flex sm:hidden gap-6 items-start">
+                  <div className="flex lg:hidden gap-6 items-start">
                     <div className="flex-shrink-0 relative z-10">
                       <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm ring-4 ring-white shadow-md">
                         {step.step}

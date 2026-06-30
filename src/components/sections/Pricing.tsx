@@ -35,7 +35,7 @@ export default function Pricing() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.05 }}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-5xl mx-auto items-center"
+          className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-5xl mx-auto items-stretch"
         >
           {PRICING_PLANS.map((plan, index) => {
             const isHighlighted = plan.highlighted

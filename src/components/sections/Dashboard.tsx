@@ -102,7 +102,7 @@ export default function Dashboard() {
           </div>
 
           {/* Cards Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {DASHBOARD_CARDS.map((card, index) => {
               const Icon = card.icon
               const isPositive = card.trend.includes('+') || card.trend.includes('Normal')
