@@ -90,7 +90,7 @@ export default function Footer() {
             <h4 className="text-white font-semibold text-base">Stay updated with HealthX AI</h4>
             <p className="text-xs text-gray-500 mt-1">Get the latest updates, medical resources and tips sent directly to your inbox.</p>
           </div>
-          <div className="flex gap-2 w-full md:w-auto max-w-md">
+          <div className="flex flex-col sm:flex-row gap-2.5 w-full md:w-auto max-w-md">
             <input
               type="email"
               placeholder="Enter your email"
@@ -98,7 +98,7 @@ export default function Footer() {
             />
             <button
               onClick={() => alert('Thanks for subscribing!')}
-              className="bg-primary text-white text-sm font-semibold rounded-full px-6 py-2.5 hover:bg-primary-dark transition-all duration-300 shadow-lg shadow-primary/10 hover:shadow-primary/20"
+              className="bg-primary text-white text-sm font-semibold rounded-full px-6 py-2.5 hover:bg-primary-dark transition-all duration-300 shadow-lg shadow-primary/10 hover:shadow-primary/20 whitespace-nowrap"
             >
               Subscribe
             </button>

@@ -20,7 +20,7 @@ export default function HowItWorks() {
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-dark tracking-tight leading-tight">
             Your health journey,
-            <br />
+            <br className="hidden sm:inline" />
             <span className="gradient-text">simplified</span>
           </h2>
           <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-xl mx-auto leading-relaxed">

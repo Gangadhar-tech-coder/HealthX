@@ -58,9 +58,9 @@ export default function Hero() {
               className="text-4xl sm:text-5xl lg:text-6xl xl:text-[62px] font-extrabold tracking-tight text-dark leading-[1.1] mt-6"
             >
               Your <span className="gradient-text-blue">24/7 AI</span>
-              <br />
+              <br className="hidden sm:inline" />
               Healthcare
-              <br />
+              <br className="hidden sm:inline" />
               <span className="gradient-text">Companion</span>
             </motion.h1>
 

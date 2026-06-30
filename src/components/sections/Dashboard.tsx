@@ -74,7 +74,7 @@ export default function Dashboard() {
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-dark tracking-tight leading-tight">
             Your health,
-            <br />
+            <br className="hidden sm:inline" />
             <span className="gradient-text">at a glance</span>
           </h2>
           <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-xl mx-auto leading-relaxed">
@@ -161,7 +161,7 @@ export default function Dashboard() {
           {/* Bar Chart Section */}
           <div className="mt-6 rounded-2xl border border-gray-100 p-5">
             <h4 className="text-sm font-bold text-dark mb-5">Weekly Calorie Deficit & Activity Trend</h4>
-            <div className="flex items-end justify-between gap-3 h-[140px] pt-4">
+            <div className="flex items-end justify-between gap-1.5 sm:gap-3 h-[140px] pt-4">
               {mockWeeklyData.map((val, i) => (
                 <div key={i} className="flex flex-col items-center gap-2.5 flex-1 group cursor-pointer">
                   {/* Visual Bar container */}

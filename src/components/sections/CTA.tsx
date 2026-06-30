@@ -23,7 +23,7 @@ export default function CTA() {
           <div className="relative z-10 max-w-2xl mx-auto">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
               Ready to Transform
-              <br />
+              <br className="hidden sm:inline" />
               Your Healthcare?
             </h2>
             <p className="text-base sm:text-lg text-blue-100/90 mt-6 leading-relaxed max-w-lg mx-auto">
