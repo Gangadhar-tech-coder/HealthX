@@ -1,10 +1,26 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { HeartPulse } from 'lucide-react'
 import { FaTwitter, FaLinkedinIn, FaGithub, FaYoutube } from 'react-icons/fa6'
 import { FOOTER_LINKS } from '../../constants/data'
 import { fadeInUp } from '../../utils/animations'
 
 export default function Footer() {
+  const getFooterLink = (link: string) => {
+    switch (link) {
+      case 'Features':
+        return '/features'
+      case 'How It Works':
+        return '/how-it-works'
+      case 'Pricing':
+        return '/pricing'
+      case 'About Us':
+        return '/about'
+      default:
+        return null
+    }
+  }
+
   return (
     <motion.footer
       initial="hidden"
@@ -18,14 +34,14 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-12">
           {/* Logo & Intro */}
           <div className="col-span-2 flex flex-col gap-4">
-            <a href="#" className="flex items-center gap-2 group w-fit">
+            <Link to="/" className="flex items-center gap-2 group w-fit">
               <div className="bg-primary/20 p-1.5 rounded-xl">
                 <HeartPulse className="w-6 h-6 text-primary" />
               </div>
               <span className="font-extrabold text-xl tracking-tight text-white flex items-center">
                 HealthX<span className="text-primary font-light ml-0.5">AI</span>
               </span>
-            </a>
+            </Link>
             <p className="text-sm text-gray-400 mt-2 leading-relaxed max-w-sm">
               Your 24/7 AI Healthcare Companion. Get instant health guidance, symptom analysis, medicine reminders, and secure health record management.
             </p>
@@ -69,16 +85,28 @@ export default function Footer() {
                 {columnName}
               </h4>
               <ul className="flex flex-col gap-2.5">
-                {links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="text-sm text-gray-400 hover:text-white transition-colors duration-200"
-                    >
-                      {link}
-                    </a>
-                  </li>
-                ))}
+                {links.map((link) => {
+                  const href = getFooterLink(link)
+                  return (
+                    <li key={link}>
+                      {href ? (
+                        <Link
+                          to={href}
+                          className="text-sm text-gray-400 hover:text-white transition-colors duration-200"
+                        >
+                          {link}
+                        </Link>
+                      ) : (
+                        <a
+                          href="#"
+                          className="text-sm text-gray-400 hover:text-white transition-colors duration-200"
+                        >
+                          {link}
+                        </a>
+                      )}
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           ))}
