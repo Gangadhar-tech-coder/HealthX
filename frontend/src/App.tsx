@@ -3,6 +3,7 @@ import { AnimatePresence } from 'framer-motion'
 import Navbar from './components/layout/Navbar'
 import ScrollToTop from './components/layout/ScrollToTop'
 import PageTransition from './components/layout/PageTransition'
+import ProtectedRoute from './components/layout/ProtectedRoute'
 
 // Section imports
 import Hero from './components/sections/Hero'
@@ -17,6 +18,10 @@ import CTA from './components/sections/CTA'
 import About from './components/sections/About'
 import Contact from './components/sections/Contact'
 import Footer from './components/layout/Footer'
+
+// Page imports
+import AuthPage from './pages/AuthPage'
+import AssistantPage from './pages/AssistantPage'
 
 function Home() {
   return (
@@ -95,10 +100,28 @@ function App() {
                 </PageTransition>
               }
             />
+            <Route
+              path="/login"
+              element={
+                <PageTransition>
+                  <AuthPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/assistant"
+              element={
+                <ProtectedRoute>
+                  <PageTransition>
+                    <AssistantPage />
+                  </PageTransition>
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </AnimatePresence>
       </main>
-      <Footer />
+      {location.pathname !== '/assistant' && <Footer />}
     </div>
   )
 }

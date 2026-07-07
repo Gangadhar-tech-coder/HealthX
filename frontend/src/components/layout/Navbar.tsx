@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HeartPulse, Menu, X } from 'lucide-react'
 import { useScrollPosition } from '../../hooks/useScrollPosition'
@@ -8,6 +8,29 @@ import { NAV_LINKS } from '../../constants/data'
 export default function Navbar() {
   const { isScrolled } = useScrollPosition()
   const [isOpen, setIsOpen] = useState(false)
+  const [hasToken, setHasToken] = useState(!!localStorage.getItem('token'))
+  const [username, setUsername] = useState(localStorage.getItem('username') || '')
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const handleAuthChange = () => {
+      setHasToken(!!localStorage.getItem('token'))
+      setUsername(localStorage.getItem('username') || '')
+    }
+    window.addEventListener('auth-change', handleAuthChange)
+    return () => {
+      window.removeEventListener('auth-change', handleAuthChange)
+    }
+  }, [])
+
+  const handleSignOut = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('username')
+    setIsOpen(false)
+    window.dispatchEvent(new Event('auth-change'))
+    navigate('/login')
+  }
 
   return (
     <>
@@ -64,18 +87,34 @@ export default function Navbar() {
 
           {/* Desktop Action Buttons */}
           <div className="hidden md:flex items-center gap-5">
-            <Link
-              to="/pricing"
-              className="text-sm font-medium text-gray-600 hover:text-dark transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              to="/pricing"
-              className="bg-primary text-white text-sm font-semibold rounded-full px-5 py-2.5 hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25 transition-all duration-300"
-            >
-              Get Started
-            </Link>
+            {hasToken ? (
+              <>
+                <span className="text-sm font-bold text-gray-500">
+                  Hi, {username}
+                </span>
+                <button
+                  onClick={handleSignOut}
+                  className="bg-primary text-white text-sm font-semibold rounded-full px-5 py-2.5 hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 cursor-pointer"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-sm font-medium text-gray-600 hover:text-dark transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/login"
+                  className="bg-primary text-white text-sm font-semibold rounded-full px-5 py-2.5 hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25 transition-all duration-300"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -116,20 +155,36 @@ export default function Navbar() {
               ))}
             </div>
             <div className="flex flex-col gap-4 mt-4">
-              <Link
-                to="/pricing"
-                onClick={() => setIsOpen(false)}
-                className="text-center text-base font-semibold text-gray-700 py-3 rounded-full hover:bg-gray-50 transition-colors"
-              >
-                Sign In
-              </Link>
-              <Link
-                to="/pricing"
-                onClick={() => setIsOpen(false)}
-                className="text-center bg-primary text-white text-base font-semibold rounded-full py-3.5 hover:bg-primary-dark shadow-md hover:shadow-lg transition-all duration-300"
-              >
-                Get Started
-              </Link>
+              {hasToken ? (
+                <>
+                  <span className="text-center text-sm font-bold text-gray-500 py-2">
+                    Logged in as {username}
+                  </span>
+                  <button
+                    onClick={handleSignOut}
+                    className="text-center bg-primary text-white text-base font-semibold rounded-full py-3.5 hover:bg-primary-dark shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="text-center text-base font-semibold text-gray-700 py-3 rounded-full hover:bg-gray-50 transition-colors"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="text-center bg-primary text-white text-base font-semibold rounded-full py-3.5 hover:bg-primary-dark shadow-md hover:shadow-lg transition-all duration-300"
+                  >
+                    Get Started
+                  </Link>
+                </>
+              )}
             </div>
           </motion.div>
         )}
