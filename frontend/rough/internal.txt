@@ -1,0 +1,2 @@
+internal:   postgresql://healthx_admin:E7hgUrSheoxaQNbbXOItMDLyjLwWCp1p@dpg-d96jbev7f7vs73donhjg-a/healthx_prod
+external:   postgresql://healthx_admin:E7hgUrSheoxaQNbbXOItMDLyjLwWCp1p@dpg-d96jbev7f7vs73donhjg-a.singapore-postgres.render.com/healthx_prod
