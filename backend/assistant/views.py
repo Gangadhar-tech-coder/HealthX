@@ -264,12 +264,18 @@ def symptom_check(request):
             raw_text = response.text.strip()
             ai_response = json.loads(raw_text)
             
+            if not isinstance(ai_response, dict):
+                raise ValueError("Parsed Gemini response is not a JSON dictionary.")
+            
         except Exception as e:
             logger.error(f"Gemini API call failed: {e}")
             # Fall back to localized grounding rule matrix
             ai_response = generate_fallback_response(message_content)
     else:
         # Fall back to localized grounding rule matrix due to no API key configured
+        ai_response = generate_fallback_response(message_content)
+        
+    if not isinstance(ai_response, dict):
         ai_response = generate_fallback_response(message_content)
         
     # 4. Save response to database and return
