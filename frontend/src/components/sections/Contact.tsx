@@ -1,26 +1,41 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle2 } from 'lucide-react'
+import { Mail, Phone, MapPin, Clock, Send, CheckCircle2, AlertCircle } from 'lucide-react'
 import { fadeInUp, staggerContainer, staggerItem } from '../../utils/animations'
+import axiosInstance from '../../api/axiosInstance'
 
 export default function Contact() {
   const [formState, setFormState] = useState({ name: '', email: '', subject: '', message: '' })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!formState.name || !formState.email || !formState.message) {
-      alert('Please fill out all required fields.')
+      setErrorMsg('Please fill out all required fields.')
       return
     }
     setIsSubmitting(true)
-    setTimeout(() => {
-      setIsSubmitting(false)
+    setErrorMsg('')
+
+    try {
+      const response = await axiosInstance.post('contact/', {
+        name: formState.name,
+        email: formState.email,
+        subject: formState.subject,
+        message: formState.message,
+      })
       setIsSuccess(true)
       setFormState({ name: '', email: '', subject: '', message: '' })
-      setTimeout(() => setIsSuccess(false), 5000)
-    }, 1500)
+      setTimeout(() => setIsSuccess(false), 8000)
+    } catch (err: any) {
+      console.error('Contact form error:', err)
+      const msg = err?.response?.data?.error || 'Something went wrong. Please try again later.'
+      setErrorMsg(msg)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -72,8 +87,8 @@ export default function Contact() {
               <div>
                 <h3 className="text-base font-bold text-dark mb-1">Email Support</h3>
                 <p className="text-sm text-gray-500 mb-2">For general support, medical info or media requests.</p>
-                <a href="mailto:support@healthx-ai.com" className="text-sm font-semibold text-primary hover:underline">
-                  support@healthx-ai.com
+                <a href="mailto:gangadhartestcoder@gmail.com" className="text-sm font-semibold text-primary hover:underline">
+                  gangadhartestcoder@gmail.com
                 </a>
               </div>
             </motion.div>
@@ -205,7 +220,7 @@ export default function Contact() {
                 />
               </div>
 
-              {/* Status Display */}
+              {/* Success Status */}
               {isSuccess && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -213,7 +228,19 @@ export default function Contact() {
                   className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex items-center gap-3 text-emerald-800"
                 >
                   <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                  <span className="text-sm font-medium">Thank you! Your message has been sent successfully.</span>
+                  <span className="text-sm font-medium">Thank you! Your message has been sent successfully. You will receive a confirmation email shortly.</span>
+                </motion.div>
+              )}
+
+              {/* Error Status */}
+              {errorMsg && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-red-50 border border-red-100 rounded-xl p-4 flex items-center gap-3 text-red-800"
+                >
+                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+                  <span className="text-sm font-medium">{errorMsg}</span>
                 </motion.div>
               )}
 
