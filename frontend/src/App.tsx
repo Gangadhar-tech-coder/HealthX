@@ -22,6 +22,7 @@ import Footer from './components/layout/Footer'
 // Page imports
 import AuthPage from './pages/AuthPage'
 import AssistantPage from './pages/AssistantPage'
+import AppointmentsPage from './pages/AppointmentsPage'
 
 function Home() {
   return (
@@ -114,6 +115,16 @@ function App() {
                 <ProtectedRoute>
                   <PageTransition>
                     <AssistantPage />
+                  </PageTransition>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/appointments"
+              element={
+                <ProtectedRoute>
+                  <PageTransition>
+                    <AppointmentsPage />
                   </PageTransition>
                 </ProtectedRoute>
               }

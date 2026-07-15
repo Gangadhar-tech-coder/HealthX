@@ -9,6 +9,7 @@ export const NAV_LINKS = [
   { label: 'How It Works', href: '/how-it-works' },
   { label: 'Pricing', href: '/pricing' },
   { label: 'AI Assistant', href: '/assistant' },
+  { label: 'Appointments', href: '/appointments' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ]

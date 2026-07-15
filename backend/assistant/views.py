@@ -287,3 +287,5 @@ def symptom_check(request):
         'urgency_level': ai_response.get('urgency_level', 'low'),
         'recommended_action': ai_response.get('recommended_action', 'Monitor symptoms.')
     }, status=status.HTTP_200_OK)
+
+
