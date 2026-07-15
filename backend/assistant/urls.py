@@ -10,4 +10,7 @@ urlpatterns = [
     path('assistant/symptom-check/', views.symptom_check, name='symptom_check'),
     path('assistant/conversations/', views.get_conversations, name='get_conversations'),
     path('assistant/conversations/<int:conversation_id>/messages/', views.get_messages, name='get_messages'),
+
+    # Contact form endpoint
+    path('contact/', views.contact_form, name='contact_form'),
 ]

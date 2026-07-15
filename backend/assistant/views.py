@@ -289,3 +289,33 @@ def symptom_check(request):
     }, status=status.HTTP_200_OK)
 
 
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def contact_form(request):
+    """
+    Public contact form endpoint. Sends structured email to admin and a confirmation copy to the sender.
+    """
+    name = request.data.get('name', '').strip()
+    email = request.data.get('email', '').strip()
+    subject = request.data.get('subject', '').strip()
+    message = request.data.get('message', '').strip()
+
+    if not name or not email or not message:
+        return Response(
+            {'error': 'Name, email, and message are required fields.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    from appointments.emails import send_contact_form_email
+    success = send_contact_form_email(name, email, subject, message)
+
+    if success:
+        return Response(
+            {'message': 'Your message has been sent successfully! You will receive a confirmation email shortly.'},
+            status=status.HTTP_200_OK
+        )
+    else:
+        return Response(
+            {'error': 'Failed to send your message. Please try again later.'},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
