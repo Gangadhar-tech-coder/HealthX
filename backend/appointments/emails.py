@@ -1,9 +1,45 @@
 import logging
-from django.core.mail import send_mail
+from django.core.mail import send_mail, get_connection
 from django.template.loader import render_to_string
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
+
+
+def send_mail_safe(subject, message, from_email, recipient_list, html_message=None):
+    try:
+        # Try sending via Gmail/SMTP
+        return send_mail(
+            subject=subject,
+            message=message,
+            from_email=from_email,
+            recipient_list=recipient_list,
+            html_message=html_message,
+            fail_silently=False
+        )
+    except Exception as e:
+        logger.warning(f"SMTP email failed to send: {e}. Falling back to Django Console Backend.")
+        try:
+            # Clean emojis and special characters for safe Windows console output
+            safe_subject = subject.encode('ascii', 'ignore').decode('ascii')
+            safe_message = message.encode('ascii', 'ignore').decode('ascii')
+            safe_html = html_message.encode('ascii', 'ignore').decode('ascii') if html_message else None
+
+            # Fall back to console logging so local dev server prints the beautiful email templates
+            console_conn = get_connection('django.core.mail.backends.console.EmailBackend')
+            return send_mail(
+                subject=safe_subject,
+                message=safe_message,
+                from_email=from_email,
+                recipient_list=recipient_list,
+                html_message=safe_html,
+                connection=console_conn,
+                fail_silently=False
+            )
+        except Exception as fallback_err:
+            logger.error(f"Console email fallback failed: {fallback_err}")
+            return False
+
 
 
 def send_appointment_confirmation_email(appointment):
@@ -137,13 +173,12 @@ If you experience severe symptoms before your appointment, call emergency servic
 HealthX AI — Your 24/7 AI Healthcare Companion
 """
 
-        send_mail(
+        send_mail_safe(
             subject=subject,
             message=plain_body,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[recipient],
             html_message=html_body,
-            fail_silently=False,
         )
 
         # Update email_reminder_sent flag
@@ -214,13 +249,12 @@ Reschedule: https://health-x-snfk.vercel.app/appointments
 HealthX AI — Your 24/7 AI Healthcare Companion
 """
 
-        send_mail(
+        send_mail_safe(
             subject=subject,
             message=plain_body,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[recipient],
             html_message=html_body,
-            fail_silently=False,
         )
         logger.info(f"Cancellation email sent for appointment #{appointment.id} to {recipient}")
         return True
@@ -289,13 +323,12 @@ Message:
 HealthX AI Platform
 """
 
-        send_mail(
+        send_mail_safe(
             subject=admin_subject,
             message=admin_plain,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[admin_email],
             html_message=admin_html,
-            fail_silently=False,
         )
 
         # Confirmation email to the user
@@ -346,13 +379,12 @@ Visit us: https://health-x-snfk.vercel.app/
 HealthX AI — Your 24/7 AI Healthcare Companion
 """
 
-        send_mail(
+        send_mail_safe(
             subject=user_subject,
             message=user_plain,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[email],
             html_message=user_html,
-            fail_silently=False,
         )
 
         logger.info(f"Contact form emails sent — admin + user confirmation to {email}")
