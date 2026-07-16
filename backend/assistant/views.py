@@ -74,6 +74,7 @@ def generate_fallback_response(message):
 
 
 @api_view(['POST'])
+@authentication_classes([])
 @permission_classes([AllowAny])
 def register_user(request):
     """
@@ -100,6 +101,7 @@ def register_user(request):
 
 
 @api_view(['POST'])
+@authentication_classes([])
 @permission_classes([AllowAny])
 def login_user(request):
     """
@@ -290,6 +292,7 @@ def symptom_check(request):
 
 
 @api_view(['POST'])
+@authentication_classes([])
 @permission_classes([AllowAny])
 def contact_form(request):
     """
