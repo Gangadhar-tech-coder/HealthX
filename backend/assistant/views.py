@@ -9,7 +9,13 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-import google.generativeai as genai
+try:
+    import google.generativeai as genai
+except ImportError as e:
+    logger = logging.getLogger(__name__)
+    logger.error(f"Failed to import google.generativeai: {e}. AI Assistant checks will fall back to rule-based generation.")
+    genai = None
+
 
 from .models import Conversation, Message
 from .serializers import ConversationSerializer, MessageSerializer
@@ -211,7 +217,7 @@ def symptom_check(request):
     
     ai_response = None
     
-    if api_key and not api_key.startswith('your_'):
+    if genai and api_key and not api_key.startswith('your_'):
         try:
             genai.configure(api_key=api_key)
             
