@@ -13,4 +13,7 @@ urlpatterns = [
 
     # Contact form endpoint
     path('contact/', views.contact_form, name='contact_form'),
+    
+    # Diagnostic endpoint
+    path('diagnostic/', views.diagnostic, name='diagnostic'),
 ]

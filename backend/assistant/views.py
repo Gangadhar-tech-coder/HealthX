@@ -328,3 +328,46 @@ def contact_form(request):
             {'error': 'Failed to send your message. Please try again later.'},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def diagnostic(request):
+    results = {}
+    
+    # 1. Check settings
+    from django.conf import settings
+    results['EMAIL_HOST'] = getattr(settings, 'EMAIL_HOST', None)
+    results['EMAIL_PORT'] = getattr(settings, 'EMAIL_PORT', None)
+    results['EMAIL_USE_TLS'] = getattr(settings, 'EMAIL_USE_TLS', None)
+    results['EMAIL_HOST_USER'] = getattr(settings, 'EMAIL_HOST_USER', None)
+    results['DEFAULT_FROM_EMAIL'] = getattr(settings, 'DEFAULT_FROM_EMAIL', None)
+    results['ADMIN_EMAIL'] = getattr(settings, 'ADMIN_EMAIL', None)
+    
+    email_password = getattr(settings, 'EMAIL_HOST_PASSWORD', None)
+    results['EMAIL_HOST_PASSWORD_SET'] = email_password is not None
+    results['EMAIL_HOST_PASSWORD_LEN'] = len(email_password) if email_password else 0
+    
+    # 2. Test importing emails
+    try:
+        from appointments.emails import send_contact_form_email
+        results['import_emails_success'] = True
+    except Exception as e:
+        results['import_emails_success'] = False
+        results['import_emails_error'] = str(e)
+        import traceback
+        results['import_emails_traceback'] = traceback.format_exc()
+        
+    # 3. Test SMTP connection
+    import socket
+    try:
+        s = socket.create_connection(('smtp.gmail.com', 587), timeout=5)
+        results['smtp_connection_success'] = True
+        s.close()
+    except Exception as e:
+        results['smtp_connection_success'] = False
+        results['smtp_connection_error'] = str(e)
+        
+    return Response(results, status=status.HTTP_200_OK)
+
